@@ -1,23 +1,19 @@
 const request = require('request');
-let userInput = process.argv[2];
-//const catBreed = (name) => {
+const userInput = process.argv[2];
+
 request(`https://api.thecatapi.com/v1/breeds/search?q=${userInput}`, function(error, response, body) {
-
-  //console.log(typeof body)
-  const data = JSON.parse(body);
-  //console.log(data);
-  //console.log(typeof data);
-  let description = data[0].description;
-  // console.log(description)
-
-
-  //onsole.log(userInput)
-  let breedName = data[0].name;
-  if (userInput !== breedName) {
-    console.error('ERROR', error);
-  } else {
-    return console.log(description);
+  if (body) {
+    body = JSON.parse(body);
+    if (body[0] === undefined) {
+      console.log("No cat exists"); // connects to site but no breed with the argument found
+    } else {
+      console.log(body[0].description); // connects to site and returns breed description based on argument
+    }
   }
 
-});
+  if (error) {
+    console.log('wrong url'); // changed URL and throws an error if URL doesn't work
+  }
 
+  
+});
